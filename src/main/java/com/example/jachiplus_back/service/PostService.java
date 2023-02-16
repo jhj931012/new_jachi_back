@@ -1,6 +1,8 @@
 package com.example.jachiplus_back.service;
 
+import com.example.jachiplus_back.config.LoginUser;
 import com.example.jachiplus_back.dto.Post.*;
+import com.example.jachiplus_back.dto.user.UserSignUpResponseDTO;
 import com.example.jachiplus_back.entity.PostEntity;
 import com.example.jachiplus_back.entity.UserEntity;
 import com.example.jachiplus_back.repository.BoardRepository;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,15 +39,12 @@ public class PostService {
 
     //게시글 등록 서비스
 
-    public PostDetailResponseDTO write(final PostWriteRequestDTO writeDTO, final String nickName) {
+    public PostDetailResponseDTO write(final PostWriteRequestDTO writeDTO, String nickname) {
 
-//        PostEntity savedPost = postRepository.save(writeDTO.toEntity());
-        PostEntity post = writeDTO.toEntity();
-        UserEntity user = userRepository.findByNickname(nickName);
-        post.setUserEntity(user);
-        postRepository.save(post);
-        log.info("<===========등록 : {} ================>", post);
-        return new PostDetailResponseDTO(post);
+
+        PostEntity savedPost = postRepository.save(writeDTO.toEntity());
+        log.info("<===========등록 : {} ================>", savedPost);
+        return new PostDetailResponseDTO(savedPost);
     }
 
 

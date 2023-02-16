@@ -24,11 +24,11 @@ public class PostWriteRequestDTO {
     @Size(min = 2, max = 20)
     private String content;
 
-    @NotBlank
+//    @NotBlank
     private String author;
 
-    @JsonFormat(pattern = "yyyy.MM.dd/hh.mm.ss")
-    private LocalDateTime reDate;
+//    @JsonFormat(pattern = "yyyy.MM.dd/hh.mm.ss")
+//    private LocalDateTime reDate;
 
     public PostEntity toEntity(){
         return PostEntity.builder()

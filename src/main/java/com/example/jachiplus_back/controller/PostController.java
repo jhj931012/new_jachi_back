@@ -3,6 +3,7 @@ package com.example.jachiplus_back.controller;
 import com.example.jachiplus_back.config.LoginUser;
 import com.example.jachiplus_back.config.SessionUser;
 import com.example.jachiplus_back.dto.Post.*;
+import com.example.jachiplus_back.dto.user.LoginResponseDTO;
 import com.example.jachiplus_back.entity.PostEntity;
 import com.example.jachiplus_back.entity.UserEntity;
 import com.example.jachiplus_back.repository.PostRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -30,9 +32,17 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/write")
-    public ResponseEntity<?> create(@LoginUser SessionUser sessionUser ,@Validated @RequestBody PostWriteRequestDTO writeDTO) {
+    public ResponseEntity<?> create(HttpSession session, @Validated @RequestBody PostWriteRequestDTO writeDTO) {
 //        PostDetailResponseDTO detailResponseDTO = postService.write(writeDTO);
-        return  ResponseEntity.ok(postService.write(writeDTO,sessionUser.getNickname()));
+
+//        LoginResponseDTO user = (LoginResponseDTO) session.getAttribute("user");
+        log.info("user: {}", session.getAttribute("user"));
+        return null;
+//        log.info("==========================================user: {}, dto: {}", user, writeDTO);
+//        PostDetailResponseDTO detailResponseDTO = postService.write(writeDTO, user.getNickname());
+//        return  ResponseEntity
+//                .ok()
+//                .body(detailResponseDTO);
 //                ResponseEntity
 //                .ok()
 //                .body(detailResponseDTO,sessionUser);

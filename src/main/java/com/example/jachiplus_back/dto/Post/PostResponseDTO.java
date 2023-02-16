@@ -24,7 +24,7 @@ public class PostResponseDTO {
     public static PostResponseDTO of(PostEntity post, boolean bol){
         return PostResponseDTO.builder()
                 .id(post.getId())
-                .nickname(post.getUserEntity().getNickname())
+//                .nickname(post.getUserEntity().getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .createdAt(post.getCreateDate())

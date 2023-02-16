@@ -68,13 +68,16 @@ public class UserService {
             throw new RuntimeException("비밀번호가 틀렸습니다.");
         }
 
-        log.info("{}님 로그인 성공!", originalUser.getNickname());
+//        log.info("{}님 로그인 성공!", originalUser.getNickname());
+
 
         // 토큰 발급
         String token = tokenProvider.createToken(originalUser);
         LoginResponseDTO responseDTO = new LoginResponseDTO(originalUser, token);
         // 세션에 로그인 데이터 저장
-        session.setAttribute("loginUser", responseDTO);
+        session.setAttribute("user", responseDTO);
+        log.info("{}님 로그인 성공!", session.getAttribute("user"));
+
 
 
 //        LoginResponseDTO loginUser
