@@ -54,8 +54,7 @@ public class UserService {
 
     public LoginResponseDTO getByCredentials(
             final String email,
-            final String rawPassword
-            , HttpSession session) {
+            final String rawPassword) {
 
         // 입력한 이메일을 통해 회원정보 조회
         UserEntity originalUser = userRepository.findByEmail(email);
@@ -74,9 +73,6 @@ public class UserService {
         // 토큰 발급
         String token = tokenProvider.createToken(originalUser);
         LoginResponseDTO responseDTO = new LoginResponseDTO(originalUser, token);
-        // 세션에 로그인 데이터 저장
-        session.setAttribute("user", responseDTO);
-        log.info("{}님 로그인 성공!", session.getAttribute("user"));
 
 
 

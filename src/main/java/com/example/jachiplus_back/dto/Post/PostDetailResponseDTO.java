@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostDetailResponseDTO {
 
+    private Long id;
     private String title;
     private String content;
     private String author;
@@ -24,10 +25,11 @@ public class PostDetailResponseDTO {
     private LocalDateTime modifiedDate;
 
     public PostDetailResponseDTO(PostEntity entity){
+        this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.author = entity.getAuthor();
-        this.createDate = LocalDateTime.from(entity.getCreateDate());
-        this.modifiedDate = LocalDateTime.from(entity.getModifiedDate());
+        this.createDate = entity.getCreateDate();
+        this.modifiedDate = entity.getModifiedDate();
     }
 }

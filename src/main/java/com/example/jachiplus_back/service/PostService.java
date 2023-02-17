@@ -1,10 +1,7 @@
 package com.example.jachiplus_back.service;
 
-import com.example.jachiplus_back.config.LoginUser;
 import com.example.jachiplus_back.dto.Post.*;
-import com.example.jachiplus_back.dto.user.UserSignUpResponseDTO;
 import com.example.jachiplus_back.entity.PostEntity;
-import com.example.jachiplus_back.entity.UserEntity;
 import com.example.jachiplus_back.repository.BoardRepository;
 import com.example.jachiplus_back.repository.PostRepository;
 import com.example.jachiplus_back.repository.UserRepository;
@@ -13,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -29,47 +26,48 @@ public class PostService {
     private final BoardRepository boardRepository;
 
     //게시글 목록 보여주기
-    public List<BoardListResponseDTO> allPost() {
-        List<PostEntity> postEntities = boardRepository.findAll();
-        return postEntities
-                .stream()
-                .map(BoardListResponseDTO::of)
+    public BoardListResponseDTO allPost() {
+        List<PostEntity> entityList = boardRepository.findAll();
+        log.info("entityList===>{}",entityList);
+        List<PostDetailResponseDTO> dtoList = entityList.stream()
+                .map(PostDetailResponseDTO::new)
                 .collect(Collectors.toList());
+        return BoardListResponseDTO.builder().posts(dtoList).build();
     }
 
     //게시글 등록 서비스
 
-    public PostDetailResponseDTO write(final PostWriteRequestDTO writeDTO, String nickname) {
+    public PostDetailResponseDTO write(final PostWriteRequestDTO writeDTO, final String nickname) {
 
 
         PostEntity savedPost = postRepository.save(writeDTO.toEntity());
+        savedPost.setAuthor(nickname);
         log.info("<===========등록 : {} ================>", savedPost);
         return new PostDetailResponseDTO(savedPost);
     }
 
 
     //삭제
-    public BoardListResponseDTO delete(final Long bno) {
-
-        try {
-            postRepository.deleteById(bno);
-        } catch (Exception e) {
-            log.error("해당 게시물이 없음 - bno : {} ==== {}", bno, e.getMessage());
-            throw new RuntimeException("게시물이 없어 삭제 실패");
-        }
-        return (BoardListResponseDTO) allPost();
+    public BoardListResponseDTO delete(final Long id) {
+        log.info("삭제실행==============================");
+        postRepository.deleteById(id);
+//        try {
+//            postRepository.deleteById(id);
+//        } catch (Exception e) {
+//            log.error("해당 게시물이 없음 - id : {} ==== {}", id, e.getMessage());
+//            throw new RuntimeException("게시물이 없어 삭제 실패");
+//        }
+        return allPost();
     }
 
-    public PostResponseDTO onePost(Long id, final UserRepository userRepository) {
-        PostEntity post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        String email = post.getUserEntity().getEmail();
-        boolean bol = post.getUserEntity().getNickname().equals(userRepository.findByEmail(email).getNickname());
-        try {
-            if (bol == true) return PostResponseDTO.of(post, bol);
-        } catch (Exception e) {
-            throw new RuntimeException("게시글 작성자가 아닙니다");
-        }
-        return PostResponseDTO.of(post, bol);
+    public BoardListResponseDTO onePost(Long id) {
+        Optional<PostEntity> entityList;
+        entityList = boardRepository.findById(id);
+        log.info("entityList===>{}",entityList);
+        List<PostDetailResponseDTO> dtoList = entityList.stream()
+                .map(PostDetailResponseDTO::new)
+                .collect(Collectors.toList());
+        return BoardListResponseDTO.builder().posts(dtoList).build();
     }
 
     public BoardListResponseDTO ByTitle(final String title) {

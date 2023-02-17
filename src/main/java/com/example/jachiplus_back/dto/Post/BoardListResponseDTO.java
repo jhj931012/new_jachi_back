@@ -12,18 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BoardListResponseDTO {
-    private Long id;
-    private String title;
-    private String nickname;
-    private String createAt;
+
     private List<PostDetailResponseDTO> posts;
 
-    public static BoardListResponseDTO of(PostEntity postEntity){
-        return BoardListResponseDTO.builder()
-                .id(postEntity.getId())
-                .title(postEntity.getTitle())
-                .nickname(postEntity.getUserEntity().getNickname())
-                .createAt(postEntity.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd/HH:mm:ss")))
-                .build();
-    }
+//    public static BoardListResponseDTO of(PostEntity postEntity){
+//        return BoardListResponseDTO.builder()
+//                .id(postEntity.getId())
+//                .title(postEntity.getTitle())
+//                .nickname(postEntity.getUserEntity().getNickname())
+//                .createAt(postEntity.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd/HH:mm:ss")))
+//                .build();
+//    }
 }

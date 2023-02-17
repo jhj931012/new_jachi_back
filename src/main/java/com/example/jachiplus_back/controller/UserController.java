@@ -64,14 +64,13 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(
             @Validated @RequestBody LoginRequestDTO requestDTO
-            , HttpSession session
     ) {
 
         try {
             LoginResponseDTO userInfo = userService.getByCredentials(
                     requestDTO.getEmail(),
-                    requestDTO.getPassword(),
-                    session
+                    requestDTO.getPassword()
+
             );
             return ResponseEntity
                     .ok()
